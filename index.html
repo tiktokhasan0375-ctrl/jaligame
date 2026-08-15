@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SuperAce - JILI Official</title>
 
-<!-- Firebase SDK (Compat Version) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-tap-highlight-color:transparent; outline:none; }
@@ -239,11 +237,11 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
 
 .version { position:absolute; bottom:3px; left:8px; font-size:10px; color:#666; z-index:5; }
 
-/* Firebase Status Indicator */
 .firebase-status {
   position:absolute; top:3px; right:8px; font-size:10px; z-index:5;
   display:flex; align-items:center; gap:4px;
-}.firebase-status .dot {
+}
+.firebase-status .dot {
   width:8px; height:8px; border-radius:50%;
   background:#f44336; animation:blink 1s infinite;
 }
@@ -292,7 +290,8 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
   padding:20px; width:85%; max-width:320px; text-align:center;
   color:#fff; box-shadow:0 0 30px rgba(255,215,0,0.5);
 }
-.modal h3 { color:#ffd700; margin-bottom:15px; font-size:20px; }.modal-row { display:flex; justify-content:space-between; margin:10px 0; font-size:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; }
+.modal h3 { color:#ffd700; margin-bottom:15px; font-size:20px; }
+.modal-row { display:flex; justify-content:space-between; margin:10px 0; font-size:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; }
 .modal-btn {
   background:linear-gradient(to bottom, #ffd700, #b8860b);
   color:#000; border:none; padding:10px 25px; border-radius:20px;
@@ -354,26 +353,32 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
 .free-spins-end .title { font-family:'Impact', sans-serif; font-size:32px; color:#ffd700; text-shadow:2px 2px 0 #000; margin-bottom:10px; }
 .free-spins-end .desc { font-size:16px; color:#fff; text-shadow:1px 1px 0 #000; margin-bottom:5px; }
 .free-spins-end .total { font-size:24px; color:#76ff03; font-weight:bold; }
+
+.connection-error {
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:#b71c1c; color:white; padding:20px 30px; border-radius:15px;
+  z-index:9999; display:none; text-align:center; font-weight:bold;
+  box-shadow:0 0 30px rgba(0,0,0,0.8); border:2px solid #ffd700;
+}
+.connection-error.show { display:block; }
 </style>
 </head>
 <body>
 
+<div class="connection-error" id="connectionError">
+  ⚠️ Connection Error!<br>Please check your internet.
+</div>
+
 <div class="phone">
-  <div class="browser-bar">
-    <span></span>
-    <div class="url"> dkwwin.com/login/</div>
-    <div class="tabs">2</div>
-    <span>⋮</span>
-  </div>
+ 
 
   <div class="header">
-    <div style="color:#fff;font-size:20px;cursor:pointer;">‹</div>
+    <div style="color:#fff;font-size:20px;cursor:pointer;" onclick="window.location.href=document.referrer || 'about:blank'">‹</div>
     <div class="balance-pill">
-      <div class="coin">$</div>
-      <span id="headerBal">৳1000.00</span>
+      <div class="coin">৳</div>
+      <span id="headerBal">৳0.00</span>
     </div>
     <div class="header-actions">
-      <div class="btn" onclick="showModal('addFunds')">+</div>
       <div class="btn" onclick="showModal('profile')">👤</div>
     </div>
   </div>
@@ -390,7 +395,8 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
       <div class="game-title">SuperAce</div>
       <div class="multiplier-bar">
         <span class="mult active" id="m1">×1</span>
-        <span class="mult" id="m2">×2</span>        <span class="mult" id="m3">×3</span>
+        <span class="mult" id="m2">×2</span>        
+        <span class="mult" id="m3">×3</span>
         <span class="mult" id="m5">×5</span>
       </div>
       <div class="sub-text">Up to <span class="green">10x</span> puzzle multiplier reward</div>
@@ -429,7 +435,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
       <div class="total">Tk <span id="totalFreeWin">0</span></div>
     </div>
 
-    <!-- Firebase Status -->
     <div class="firebase-status" id="firebaseStatus">
       <div class="dot"></div>
       <span id="firebaseStatusText">Connecting...</span>
@@ -439,7 +444,8 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
   <div class="controls">
     <div class="controls-row">
       <button class="ctrl-btn" onclick="showModal('settings')" title="Settings">
-        <svg viewBox="0 0 24 24" fill="#fff"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.6 3.6 0 0112 15.6z"/></svg>      </button>
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.6 3.6 0 0112 15.6z"/></svg>
+      </button>
       <button class="ctrl-btn" onclick="openBetSelector()" title="Select Bet">
         <svg viewBox="0 0 24 24" fill="#76ff03"><circle cx="12" cy="12" r="9" fill="none" stroke="#76ff03" stroke-width="2"/><path d="M12 7v10M7 12h10" stroke="#76ff03" stroke-width="2.5" stroke-linecap="round"/></svg>
       </button>
@@ -455,7 +461,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
       <div><span class="bet-label" onclick="openBetSelector()">Bet Tk <span id="betAmt">0.5</span></span></div>
       <div class="autoplay-hint" id="autoHint">Tap to autoplay</div>
     </div>
-    <div class="balance-row">Balance Tk <span id="footerBal">1000.000</span></div>
+    <div class="balance-row">Balance Tk <span id="footerBal">0.000</span></div>
   </div>
 
   <div class="version">v_134_0005</div>
@@ -480,7 +486,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
 
 <script>
 // ============================================
-// FIREBASE CONFIGURATION (UPDATED)
+// FIREBASE CONFIG - MAIN SITE CONNECTION
 // ============================================
 const firebaseConfig = {
   apiKey: "AIzaSyAy9PPm5UJpuhxfuPhNgqsUOOBFXXlmzU8",
@@ -493,93 +499,39 @@ const firebaseConfig = {
   measurementId: "G-B6EF5RW1WZ"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const database = firebase.database();
-let analytics = null;
-try {
-  analytics = firebase.analytics();
-} catch(e) { console.log('Analytics not available'); }
-
-// Generate unique user ID for this player
-function getUserId() {
-  let uid = localStorage.getItem('superace_uid');
-  if (!uid) {
-    uid = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('superace_uid', uid);
-  }
-  return uid;
-}
-
-const USER_ID = getUserId();
-const userRef = database.ref('players/' + USER_ID);
-const statusEl = document.getElementById('firebaseStatus');
-const statusText = document.getElementById('firebaseStatusText');
-
-// Update Firebase connection status
-database.ref('.info/connected').on('value', (snap) => {
-  if (snap.val() === true) {
-    statusEl.classList.add('connected');
-    statusText.textContent = 'Connected';
-    // Load user data from Firebase
-    loadUserData();
-  } else {
-    statusEl.classList.remove('connected');
-    statusText.textContent = 'Offline';
-  }
-});
-
-// Load user data from Firebase
-function loadUserData() {
-  userRef.once('value').then((snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      balance = data.balance !== undefined ? data.balance : 1000;
-      bet = data.bet !== undefined ? data.bet : 0.5;
-      spinCounter = data.spinCounter !== undefined ? data.spinCounter : 0;
-      accelCollected = data.accelCollected !== undefined ? data.accelCollected : 0;
-      updateUI();      
-      console.log('User data loaded from Firebase');
-    } else {
-      // New user - save initial data
-      saveUserData();
-    }
-  }).catch((err) => {
-    console.error('Error loading data:', err);
-  });
-}
-
-// Save user data to Firebase
-function saveUserData() {
-  userRef.update({
-    balance: balance,
-    bet: bet,
-    spinCounter: spinCounter,
-    accelCollected: accelCollected,
-    lastUpdated: firebase.database.ServerValue.TIMESTAMP
-  }).catch((err) => {
-    console.error('Error saving data:', err);
-  });
-}
-
-// Log game event to Firebase
-function logGameEvent(eventName, eventData) {
-  const logsRef = database.ref('game_logs/' + USER_ID).push();
-  logsRef.set({
-    event: eventName,
-    data: eventData,
-    timestamp: firebase.database.ServerValue.TIMESTAMP
-  }).catch(err => console.log('Log error:', err));
-  
-  if (analytics) {
-    try {
-      analytics.logEvent(eventName, eventData);
-    } catch(e) {}
-  }
-}
+database.goOnline();
 
 // ============================================
-// GAME CODE (WITH PROFIT LOGIC)
+// USER CONNECTION - GET FROM URL OR LOCALSTORAGE
+// ============================================
+let USER_PHONE = "Guest";
+let userRef = null;
+let balanceRef = null;
+let turnoverRef = null;
+let balanceListener = null;
+
+function getUserPhone() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let phone = urlParams.get('user');
+  
+  if (!phone) {
+    phone = localStorage.getItem('userPhone');
+  }
+  
+  // Ensure 0 prefix for Bangladesh numbers
+  if (phone && !phone.startsWith('0')) {
+    phone = '0' + phone;
+  }
+  
+  return phone || "Guest";
+}
+
+USER_PHONE = getUserPhone();
+
+// ============================================
+// GAME STATE
 // ============================================
 const SYMBOLS = {
   ace: `<svg viewBox="0 0 100 130" width="100%" height="100%"><path d="M50 10 L85 50 Q90 60 80 65 L65 60 L55 115 L45 115 L35 60 L20 65 Q10 60 15 50 Z" fill="#000" stroke="#ffd700" stroke-width="2"/><text x="50" y="75" text-anchor="middle" fill="#ffd700" font-family="Impact" font-size="22" font-weight="bold">ACE</text></svg>`,
@@ -598,7 +550,7 @@ const BET_OPTIONS = [0.5, 1, 2, 5, 10, 20, 50, 100];
 const ACCEL_MULTIPLIERS = [4, 6, 8, 10, 18, 26, 36];
 const ACCEL_WIN_AMOUNTS = [2, 5, 10, 50];
 
-let balance = 1000, bet = 0.5, win = 0;
+let balance = 0, bet = 1, win = 0;
 let isSpinning = false, autoPlay = false, turbo = false, autoTimer = null;
 let acceleratorMode = false;
 let freeSpinsLeft = 0;
@@ -610,7 +562,112 @@ let spinCounter = 0;
 const SPINS_PER_ACCEL = 50;
 
 const grid = document.getElementById('grid');
+const statusEl = document.getElementById('firebaseStatus');
+const statusText = document.getElementById('firebaseStatusText');
+const errorEl = document.getElementById('connectionError');
 
+// ============================================
+// FIREBASE INITIALIZATION
+// ============================================
+function initFirebase() {
+  if (USER_PHONE === "Guest") {
+    showConnectionError("No user logged in!");
+    return;
+  }
+  
+  userRef = database.ref('users/' + USER_PHONE);
+  balanceRef = database.ref('users/' + USER_PHONE + '/balance');
+  turnoverRef = database.ref('users/' + USER_PHONE + '/turnover');
+  
+  // Connection status listener
+  database.ref('.info/connected').on('value', (snap) => {
+    if (snap.val() === true) {
+      statusEl.classList.add('connected');
+      statusText.textContent = 'Connected';
+      errorEl.classList.remove('show');
+    } else {
+      statusEl.classList.remove('connected');
+      statusText.textContent = 'Offline';
+    }
+  });
+  
+  // REAL-TIME BALANCE LISTENER - Updates whenever main site changes balance
+  if (balanceListener) balanceRef.off('value', balanceListener);
+  balanceListener = balanceRef.on('value', (snapshot) => {
+    if (snapshot.exists()) {
+      balance = parseFloat(snapshot.val()) || 0;
+      updateUI();
+    }
+  }, (error) => {
+    console.error('Balance listener error:', error);
+    showConnectionError("Cannot load balance!");
+  });
+}
+
+function showConnectionError(msg) {
+  errorEl.innerHTML = '⚠️ ' + msg;
+  errorEl.classList.add('show');
+  setTimeout(() => errorEl.classList.remove('show'), 3000);
+}
+
+// ============================================
+// DEDUCT BET WITH TURNOVER REDUCTION
+// ============================================
+async function deductBet(betAmount) {
+  if (USER_PHONE === "Guest") return false;
+  
+  try {
+    // First check current balance
+    const balSnap = await balanceRef.once('value');
+    const currentBal = parseFloat(balSnap.val()) || 0;
+    
+    if (currentBal < betAmount) {
+      return false;
+    }
+    
+    // Update balance (deduct)
+    await balanceRef.transaction(current => {
+      const newBal = (parseFloat(current) || 0) - betAmount;
+      return newBal < 0 ? undefined : newBal;
+    });
+    
+    // Reduce turnover (important for withdrawal)
+    await turnoverRef.transaction(current => {
+      let newT = (parseFloat(current) || 0) - betAmount;
+      return newT < 0 ? 0 : newT;
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Bet deduction error:', error);
+    showConnectionError("Bet failed!");
+    return false;
+  }
+}
+
+// ============================================
+// ADD WINNINGS TO BALANCE
+// ============================================
+async function addWinnings(winAmount) {
+  if (USER_PHONE === "Guest" || winAmount <= 0) return;
+  
+  try {
+    await balanceRef.transaction(current => {
+      return (parseFloat(current) || 0) + winAmount;
+    });
+    
+    // Add to totalDeposit for tracking (optional)
+    await database.ref('users/' + USER_PHONE + '/totalDeposit').transaction(current => {
+      return (parseFloat(current) || 0) + winAmount;
+    });
+  } catch (error) {
+    console.error('Add winnings error:', error);
+  }
+}
+
+// ============================================
+// GAME LOGIC
+// ============================================
 function initGrid() {
   grid.innerHTML = '';
   for (let i = 0; i < 20; i++) {
@@ -634,49 +691,22 @@ function renderCard(el, sym) {
   el.appendChild(s);
 }
 
-// ============================================
-// RIGGED LOGIC FOR COMPANY PROFIT
-// ============================================
 function randomSym(isFinalResult = false) { 
-  // Accelerator logic remains mostly same but tighter
   if (acceleratorMode) {
-    // In free spins, give small wins more often than big ones
     const rand = Math.random();
     if (rand > 0.8) return CARD_TYPES[Math.floor(Math.random() * CARD_TYPES.length)];
-    return CARD_TYPES[Math.floor(Math.random() * 3)]; // Bias towards lower cards
+    return CARD_TYPES[Math.floor(Math.random() * 3)];
   } 
 
-  // Force Accelerator symbol occasionally based on counter
   if (spinCounter > 0 && spinCounter % SPINS_PER_ACCEL === 0) {
     return {type:'accelerator', rank:''};
   }
 
-  // PROFIT LOGIC: Only apply strict rigging on the FINAL result generation
   if (isFinalResult) {
-    // 75% chance to force a non-matching pattern to ensure loss or very small win
     const shouldPlayerLose = Math.random() < 0.75; 
     
     if (shouldPlayerLose) {
-      // Generate a sequence that guarantees NO horizontal matches in first 3 rows
-      // and minimizes vertical matches
-      const safeSymbols = [];
-      for(let i=0; i<20; i++) {
-        let sym;
-        do {
-          sym = CARD_TYPES[Math.floor(Math.random() * CARD_TYPES.length)];
-        } while (
-          // Check horizontal neighbors (if in matchable zone)
-          (i % 5 < 3 && safeSymbols.length >= i+2 && 
-           safeSymbols[i].type === safeSymbols[i+1]?.type && safeSymbols[i+1]?.type === sym.type) ||
-          // Simple check: just avoid matching previous 2 in row
-          (i % 5 >= 2 && safeSymbols[i-1].type === sym.type && safeSymbols[i-2].type === sym.type)
-        );
-        safeSymbols.push(sym);
-      }
-      // Return a random one from this "safe" set, or just purely random low value
-      // Actually, since we generate one by one in finishSpin, we need a simpler approach:
-      // Just return a random LOW value symbol 80% of time
-      const lowValCards = CARD_TYPES.slice(2); // Q, J, Spade
+      const lowValCards = CARD_TYPES.slice(2);
       if (Math.random() < 0.8) {
          return lowValCards[Math.floor(Math.random() * lowValCards.length)];
       }
@@ -713,8 +743,6 @@ function openBetSelector() {
     btn.onclick = () => { 
       bet = b; 
       updateUI(); 
-      saveUserData();
-      logGameEvent('bet_changed', {new_bet: bet});
       overlay.classList.remove('show'); 
     };
     opts.appendChild(btn);
@@ -729,7 +757,7 @@ function closeBet(e) {
 function checkMatches() {
   const cards = grid.querySelectorAll('.card');
   const matches = new Set();
-    for (let row = 0; row < 3; row++) {
+  for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
       const idx = row * 5 + col;
       const sym1 = cards[idx].dataset.sym;
@@ -767,18 +795,24 @@ function renderCardWithSym(el, sym) {
 async function spin() {
   if (isSpinning) return;
   
-  if (!acceleratorMode && balance < bet) { 
-    showModal('noBalance'); 
-    stopAuto(); 
-    return; 
-  }
-
-  isSpinning = true;
-  
   if (!acceleratorMode) {
-    balance -= bet;
+    if (USER_PHONE === "Guest") {
+      showConnectionError("Please login first!");
+      return;
+    }
+    
+    // DEDUCT BET FROM FIREBASE
+    const success = await deductBet(bet);
+    if (!success) {
+      showModal('noBalance');
+      stopAuto();
+      return;
+    }
+    
     spinCounter++;
   }  
+  
+  isSpinning = true;
   win = 0; 
   updateUI();
 
@@ -793,7 +827,7 @@ async function spin() {
   const animInterval = setInterval(() => {
     cards.forEach(c => { 
       c.classList.add('spinning'); 
-      const sym = randomSym(false); // Animation uses pure random
+      const sym = randomSym(false);
       renderCardWithSym(c, sym);
     });
     elapsed += interval;
@@ -807,10 +841,9 @@ async function spin() {
 async function finishSpin() {
   const cards = grid.querySelectorAll('.card');
   
-  // GENERATE FINAL RESULT WITH PROFIT BIAS
   cards.forEach(c => { 
     c.classList.remove('spinning'); 
-    const sym = randomSym(true); // TRUE enables rigged logic
+    const sym = randomSym(true);
     renderCardWithSym(c, sym);
   });
   document.getElementById('spinBtn').classList.remove('spinning');
@@ -839,12 +872,6 @@ async function finishSpin() {
       accelCollected += accelFound;
       if (accelCollected > ACCEL_REQUIRED) accelCollected = ACCEL_REQUIRED;
       updateUI();
-      saveUserData();
-      
-      logGameEvent('accelerator_collected', {
-        collected: accelCollected,
-        spin: spinCounter
-      });
       
       cards.forEach(c => {
         if (c.dataset.sym === 'accelerator') {
@@ -865,18 +892,14 @@ async function finishSpin() {
   }
 
   await cascadeMatches();
+  
+  // ADD WINNINGS TO FIREBASE IF ANY
+  if (win > 0) {
+    await addWinnings(win);
+  }
 
   updateUI(); 
   isSpinning = false;
-  
-  // Save to Firebase after spin
-  saveUserData();
-  logGameEvent('spin_complete', {
-    spin: spinCounter,
-    balance: balance,
-    win: win,
-    mode: acceleratorMode ? 'free' : 'normal'
-  });
   
   if (acceleratorMode && freeSpinsLeft > 0) {
     setTimeout(() => spin(), turbo ? 500 : 1500);  
@@ -911,7 +934,6 @@ async function cascadeMatches() {
     matches.forEach(idx => {
       const row = Math.floor(idx / 5);
       if (row < 3) {
-        // New cards falling in should also be biased slightly against huge chains
         const sym = randomSym(!acceleratorMode && Math.random() > 0.3); 
         renderCardWithSym(cards[idx], sym);
         cards[idx].classList.remove('breaking');
@@ -919,9 +941,6 @@ async function cascadeMatches() {
       }
     });
 
-    // REDUCED MULTIPLIER PROBABILITY
-    // Original: random from [1,2,3,5]
-    // New: 60% chance of x1, 30% x2, 10% x3/x5
     let mult = 1;
     const rng = Math.random();
     if (acceleratorMode) {
@@ -932,14 +951,10 @@ async function cascadeMatches() {
        else mult = Math.random() < 0.5 ? 3 : 5;
     }
 
-    // REDUCED WIN AMOUNT CALCULATION
-    // Original: bet * mult * (Math.random()*2+1) -> Avg ~1.5x base
-    // New: bet * mult * (Math.random()*0.8 + 0.2) -> Avg ~0.6x base
     let winFactor = acceleratorMode ? (Math.random()*2+1) : (Math.random()*0.8 + 0.2);
     
-    // Hard cap on normal wins to prevent accidental jackpots
     if (!acceleratorMode && mult <= 2 && Math.random() > 0.9) {
-        winFactor = 0.1; // Occasional tiny win to keep hope alive
+        winFactor = 0.1;
     }
 
     const winAmt = acceleratorMode 
@@ -947,7 +962,7 @@ async function cascadeMatches() {
         : bet * mult * winFactor;
         
     win += winAmt;
-    balance += winAmt;
+    // Note: Balance will be updated via real-time listener after addWinnings()
     
     if (acceleratorMode) {
       freeSpinsTotalWin += winAmt;
@@ -970,12 +985,6 @@ function triggerAccelerator() {
   freeSpinsTotalWin = 0;
   accelCollected = 0;
   updateUI();
-  saveUserData();
-  
-  logGameEvent('accelerator_activated', {
-    spin: spinCounter,
-    balance_before: balance
-  });
   
   const activation = document.getElementById('accelActivation');
   activation.classList.add('show');
@@ -1002,10 +1011,10 @@ async function endFreeSpins() {
   
   document.getElementById('freeSpinsBanner').classList.remove('show');
   
-  logGameEvent('free_spins_ended', {
-    total_win: freeSpinsTotalWin,
-    final_balance: balance  
-  });
+  // Add all free spin winnings at once
+  if (freeSpinsTotalWin > 0) {
+    await addWinnings(freeSpinsTotalWin);
+  }
   
   await sleep(3000);
   
@@ -1017,7 +1026,6 @@ async function endFreeSpins() {
   
   isSpinning = false;
   updateUI();
-  saveUserData();
   
   if (autoPlay) {
     if (balance >= bet) {
@@ -1065,15 +1073,18 @@ function toggleTurbo() {
   document.getElementById('turboBtn').style.background = turbo ? 'radial-gradient(circle at 30% 30%, #ffeb3b, #f57f17)' : '';
 }
 
-function buyBonus() {
+async function buyBonus() {
   if (isSpinning || acceleratorMode) return;
   const cost = bet * 50;
   if (balance < cost) { showModal('noBalanceBonus'); return; }
   if (confirm(`Buy Bonus for Tk ${cost.toFixed(2)}?`)) {
-    balance -= cost; updateUI();
-    saveUserData();
-    logGameEvent('buy_bonus', {cost: cost, balance: balance});
-    triggerAccelerator();
+    // Deduct from Firebase
+    const success = await deductBet(cost);
+    if (success) {
+      triggerAccelerator();
+    } else {
+      showConnectionError("Buy bonus failed!");
+    }
   }
 }
 
@@ -1081,30 +1092,25 @@ function showModal(type) {
   const o = document.getElementById('modalOverlay');
   const c = document.getElementById('modalContent');
   let h = '';
-  if (type==='settings') h=`<h3>⚙️ Settings</h3><div class="modal-row"><span>Sound</span><span>ON 🔊</span></div><div class="modal-row"><span>Music</span><span>ON 🎵</span></div><div class="modal-row"><span>Vibration</span><span>ON 📳</span></div><div class="modal-row"><span>User ID</span><span style="font-size:9px;">${USER_ID.substr(0,15)}...</span></div><button class="modal-btn" onclick="closeModal()">Close</button>`;
-  else if (type==='addFunds') h=`<h3>Add Funds</h3><div class="modal-row"><span>Current</span><span>Tk ${balance.toFixed(2)}</span></div><button class="modal-btn" onclick="addMoney(500);closeModal()">+ Tk 500</button><button class="modal-btn" onclick="addMoney(1000);closeModal()">+ Tk 1000</button>`;
-  else if (type==='profile') h=`<h3>👤 Profile</h3><div class="modal-row"><span>User ID</span><span style="font-size:10px;">${USER_ID.substr(0,18)}</span></div><div class="modal-row"><span>Total Spins</span><span>${spinCounter}</span></div><div class="modal-row"><span>Balance</span><span>Tk ${balance.toFixed(2)}</span></div><button class="modal-btn" onclick="closeModal()">Close</button>`;
-  else if (type==='noBalance') h=`<h3>Insufficient Balance</h3><p>Please add funds to continue.</p><button class="modal-btn" onclick="closeModal()">OK</button>`;
+  if (type==='settings') h=`<h3>⚙️ Settings</h3><div class="modal-row"><span>Sound</span><span>ON 🔊</span></div><div class="modal-row"><span>Music</span><span>ON 🎵</span></div><div class="modal-row"><span>Vibration</span><span>ON 📳</span></div><div class="modal-row"><span>Phone</span><span style="font-size:11px;">${USER_PHONE}</span></div><button class="modal-btn" onclick="closeModal()">Close</button>`;
+  else if (type==='profile') h=`<h3>👤 Profile</h3><div class="modal-row"><span>Phone</span><span style="font-size:11px;">${USER_PHONE}</span></div><div class="modal-row"><span>Total Spins</span><span>${spinCounter}</span></div><div class="modal-row"><span>Balance</span><span>Tk ${balance.toFixed(2)}</span></div><button class="modal-btn" onclick="closeModal()">Close</button>`;
+  else if (type==='noBalance') h=`<h3>Insufficient Balance</h3><p>Please deposit from main site to continue.</p><button class="modal-btn" onclick="closeModal()">OK</button>`;
   else if (type==='noBalanceBonus') h=`<h3>Not Enough Balance</h3><p>Need Tk ${(bet*50).toFixed(2)} for Buy Bonus.</p><button class="modal-btn" onclick="closeModal()">OK</button>`;
   c.innerHTML = h; o.classList.add('show');
 }
 
 function closeModal(e) { if(!e||e.target.id==='modalOverlay') document.getElementById('modalOverlay').classList.remove('show'); }
-function addMoney(a) { 
-  balance+=a; 
-  updateUI(); 
-  saveUserData();
-  logGameEvent('add_funds', {amount: a, new_balance: balance});
-}
 function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-// Save data before page unload
-window.addEventListener('beforeunload', () => {
-  saveUserData();
-});
+// ============================================
+// INITIALIZATION
+// ============================================
+initGrid();
+initFirebase();
+updateUI();
 
-// Initialize Game
-initGrid(); updateUI();
+// Log user entry
+console.log('SuperAce loaded for user:', USER_PHONE);
 </script>
 </body>
 </html>
