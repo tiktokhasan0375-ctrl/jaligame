@@ -9,369 +9,116 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <style>
+/* CSS একই রাখা হয়েছে */
 * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-tap-highlight-color:transparent; outline:none; }
 html, body { width:100%; height:100%; overflow:hidden; background:#000; font-family:'Arial', sans-serif; }
-
-.phone {
-  width:100%; max-width:450px; height:100vh; margin:0 auto;
-  background:#1a0f0a; position:relative; overflow:hidden;
-  display:flex; flex-direction:column;
-}
-
-.browser-bar {
-  background:#2d2d2d; padding:8px 12px; display:flex; align-items:center; gap:10px;
-  font-size:12px; color:#ddd; flex-shrink:0; z-index:10;
-}
-.browser-bar .url {
-  flex:1; background:#424242; padding:6px 10px; border-radius:15px; font-size:11px;
-  display:flex; align-items:center; gap:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.browser-bar .tabs { background:#424242; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; }
-
-.header {
-  background:linear-gradient(to bottom, #1a3a5c, #0f2540);
-  padding:10px 12px; display:flex; align-items:center; justify-content:space-between;
-  border-bottom:2px solid #000; flex-shrink:0; z-index:10;
-}
-.balance-pill {
-  background:linear-gradient(to right, #1565c0, #0d47a1);
-  padding:6px 14px; border-radius:20px; display:flex; align-items:center; gap:6px;
-  border:1px solid #ffd700; color:#fff; font-weight:bold; font-size:14px;
-  box-shadow:0 2px 5px rgba(0,0,0,0.5);
-}
-.coin {
-  width:22px; height:22px; background:radial-gradient(circle at 30% 30%, #fff59d, #f9a825);
-  border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:14px; font-weight:bold; color:#5d4037; border:2px solid #e65100;
-}
-.header-actions { display:flex; gap:8px; }
-.header-actions .btn {  width:28px; height:28px; border-radius:50%; background:#1565c0;
-  border:1px solid #ffd700; color:#fff; display:flex; align-items:center; justify-content:center;
-  font-size:16px; cursor:pointer;
-}
-
-.game-area {
-  flex:1; display:flex; flex-direction:column; position:relative; min-height:0;
-  background: radial-gradient(ellipse at center, #2d5a3d 0%, #1a3d2a 60%, #0d2818 100%);
-}
-
-.wood-frame-top {
-  height:90px; flex-shrink:0;
-  background: repeating-linear-gradient(90deg, #3e2723 0px, #5d4037 2px, #4e342e 4px, #3e2723 6px),
-              linear-gradient(to bottom, #4e342e, #2e1c15);
-  position:relative;
-  box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5), 0 5px 10px rgba(0,0,0,0.5);
-}
-
-.jili-badge {
-  position:absolute; left:-5px; top:20px;
-  background:linear-gradient(to bottom, #ffd700, #b8860b);
-  color:#000; font-weight:bold; font-size:11px; padding:4px 8px;
-  border-radius:4px; transform:rotate(-90deg); transform-origin:left top;
-  border:2px solid #8b6914; z-index:5; letter-spacing:1px;
-}
-
-.buy-bonus {
-  position:absolute; right:10px; top:10px; z-index:10; cursor:pointer;
-  animation:bonusPulse 1.5s infinite;
-}
-.buy-bonus .circle {
-  width:65px; height:65px; border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, #ff5252, #b71c1c);
-  border:3px solid #ffd700;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  color:#ffd700; font-weight:bold; font-size:13px; line-height:1.1;
-  box-shadow:0 0 15px rgba(255,0,0,0.7), inset 0 0 10px rgba(0,0,0,0.3);
-  text-shadow:1px 1px 2px #000;
-}
+.phone { width:100%; max-width:450px; height:100vh; margin:0 auto; background:#1a0f0a; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+.header { background:linear-gradient(to bottom, #1a3a5c, #0f2540); padding:10px 12px; display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #000; flex-shrink:0; z-index:10; }
+.balance-pill { background:linear-gradient(to right, #1565c0, #0d47a1); padding:6px 14px; border-radius:20px; display:flex; align-items:center; gap:6px; border:1px solid #ffd700; color:#fff; font-weight:bold; font-size:14px; box-shadow:0 2px 5px rgba(0,0,0,0.5); }
+.coin { width:22px; height:22px; background:radial-gradient(circle at 30% 30%, #fff59d, #f9a825); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:bold; color:#5d4037; border:2px solid #e65100; }
+.game-area { flex:1; display:flex; flex-direction:column; position:relative; min-height:0; background: radial-gradient(ellipse at center, #2d5a3d 0%, #1a3d2a 60%, #0d2818 100%); }
+.wood-frame-top { height:90px; flex-shrink:0; background: repeating-linear-gradient(90deg, #3e2723 0px, #5d4037 2px, #4e342e 4px, #3e2723 6px), linear-gradient(to bottom, #4e342e, #2e1c15); position:relative; box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5), 0 5px 10px rgba(0,0,0,0.5); }
+.jili-badge { position:absolute; left:-5px; top:20px; background:linear-gradient(to bottom, #ffd700, #b8860b); color:#000; font-weight:bold; font-size:11px; padding:4px 8px; border-radius:4px; transform:rotate(-90deg); transform-origin:left top; border:2px solid #8b6914; z-index:5; letter-spacing:1px; }
+.buy-bonus { position:absolute; right:10px; top:10px; z-index:10; cursor:pointer; animation:bonusPulse 1.5s infinite; }
+.buy-bonus .circle { width:65px; height:65px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ff5252, #b71c1c); border:3px solid #ffd700; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#ffd700; font-weight:bold; font-size:13px; line-height:1.1; box-shadow:0 0 15px rgba(255,0,0,0.7), inset 0 0 10px rgba(0,0,0,0.3); text-shadow:1px 1px 2px #000; }
 @keyframes bonusPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
-
 .title-section { text-align:center; padding:8px 10px 0; flex-shrink:0; }
-.game-title {
-  font-family:'Impact', 'Arial Black', sans-serif; font-size:40px; font-weight:900;
-  background:linear-gradient(to bottom, #fff 0%, #ffd700 50%, #b8860b 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  filter:drop-shadow(2px 2px 0 #000); letter-spacing:2px; margin-bottom:5px;
-}
-
-.multiplier-bar {  background:linear-gradient(to bottom, #ffd54f, #f9a825, #f57f17);
-  border-radius:25px; padding:6px 15px;
-  display:inline-flex; gap:15px; margin:0 auto;
-  border:2px solid #5d4037;
-  box-shadow:0 3px 8px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.4);
-}
+.game-title { font-family:'Impact', 'Arial Black', sans-serif; font-size:40px; font-weight:900; background:linear-gradient(to bottom, #fff 0%, #ffd700 50%, #b8860b 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(2px 2px 0 #000); letter-spacing:2px; margin-bottom:5px; }
+.multiplier-bar { background:linear-gradient(to bottom, #ffd54f, #f9a825, #f57f17); border-radius:25px; padding:6px 15px; display:inline-flex; gap:15px; margin:0 auto; border:2px solid #5d4037; box-shadow:0 3px 8px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.4); }
 .mult { font-family:'Impact', sans-serif; font-size:22px; font-weight:bold; color:#3e2723; transition:all 0.3s; }
 .mult.active { color:#ff1744; font-size:26px; text-shadow:0 0 8px #ffeb3b; transform:scale(1.1); }
-
 .sub-text { color:#fff; font-size:13px; margin-top:6px; text-shadow:1px 1px 3px #000; font-weight:bold; }
 .sub-text .green { color:#76ff03; }
-
-.accelerator-counter {
-  background:linear-gradient(to bottom, #2e1c15, #1a0f0a);
-  border:2px solid #ffd700; border-radius:15px;
-  padding:8px 15px; margin:8px auto;
-  display:flex; align-items:center; gap:10px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.5);
-  max-width:300px;
-}
-.accelerator-counter .icon {
-  width:40px; height:40px;
-  background:radial-gradient(circle, #ff1744, #b71c1c);
-  border-radius:50%; border:2px solid #ffd700;
-  display:flex; align-items:center; justify-content:center;
-  font-size:24px; animation:iconPulse 2s infinite;
-}
+.accelerator-counter { background:linear-gradient(to bottom, #2e1c15, #1a0f0a); border:2px solid #ffd700; border-radius:15px; padding:8px 15px; margin:8px auto; display:flex; align-items:center; gap:10px; box-shadow:0 3px 10px rgba(0,0,0,0.5); max-width:300px; }
+.accelerator-counter .icon { width:40px; height:40px; background:radial-gradient(circle, #ff1744, #b71c1c); border-radius:50%; border:2px solid #ffd700; display:flex; align-items:center; justify-content:center; font-size:24px; animation:iconPulse 2s infinite; }
 @keyframes iconPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
 .accelerator-counter .text { color:#ffd700; font-weight:bold; font-size:14px; }
-.accelerator-counter .count { 
-  font-family:'Impact', sans-serif; font-size:24px; color:#fff;
-  text-shadow:0 0 10px #ff1744;
-}
-.accelerator-counter.ready {
-  animation:readyPulse 1s infinite; border-color:#76ff03;
-}
+.accelerator-counter .count { font-family:'Impact', sans-serif; font-size:24px; color:#fff; text-shadow:0 0 10px #ff1744; }
+.accelerator-counter.ready { animation:readyPulse 1s infinite; border-color:#76ff03; }
 @keyframes readyPulse { 0%,100%{box-shadow:0 0 20px #76ff03;} 50%{box-shadow:0 0 40px #76ff03;} }
-
-.slot-container {
-  flex:1; padding:10px; display:flex; flex-direction:column; justify-content:center; min-height:0;
-}
-.slot-frame {
-  background:linear-gradient(to bottom, #8d6e63, #5d4037);
-  padding:8px; border-radius:10px;
-  box-shadow:inset 0 0 15px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
-  height:100%; display:flex; flex-direction:column;
-}
-.slot-grid {
-  display:grid; grid-template-columns:repeat(5, 1fr); grid-template-rows:repeat(4, 1fr);
-  gap:4px; background:#0d2818; padding:6px; border-radius:6px; flex:1;}
-
-.card {
-  background:linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
-  border-radius:6px; position:relative; overflow:hidden;
-  box-shadow:0 2px 4px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(0,0,0,0.1);
-  display:flex; align-items:center; justify-content:center;
-  transition:all 0.3s;
-}
+.slot-container { flex:1; padding:10px; display:flex; flex-direction:column; justify-content:center; min-height:0; }
+.slot-frame { background:linear-gradient(to bottom, #8d6e63, #5d4037); padding:8px; border-radius:10px; box-shadow:inset 0 0 15px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5); height:100%; display:flex; flex-direction:column; }
+.slot-grid { display:grid; grid-template-columns:repeat(5, 1fr); grid-template-rows:repeat(4, 1fr); gap:4px; background:#0d2818; padding:6px; border-radius:6px; flex:1;}
+.card { background:linear-gradient(135deg, #fff 0%, #e0e0e0 100%); border-radius:6px; position:relative; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(0,0,0,0.1); display:flex; align-items:center; justify-content:center; transition:all 0.3s; }
 .card.spinning { animation:spinCard 0.15s linear infinite; }
 @keyframes spinCard { 0%{transform:translateY(-4px);opacity:0.7;} 100%{transform:translateY(4px);opacity:1;} }
-
 .card.breaking { animation:breakCard 0.5s ease-out forwards; }
-@keyframes breakCard { 
-  0%{transform:scale(1);opacity:1;} 
-  50%{transform:scale(1.2) rotate(10deg);opacity:0.5;} 
-  100%{transform:scale(0) rotate(180deg);opacity:0;} 
-}
-
+@keyframes breakCard { 0%{transform:scale(1);opacity:1;} 50%{transform:scale(1.2) rotate(10deg);opacity:0.5;} 100%{transform:scale(0) rotate(180deg);opacity:0;} }
 .card.new-card { animation:newCard 0.4s ease-out; }
-@keyframes newCard { 
-  0%{transform:translateY(-50px);opacity:0;} 
-  100%{transform:translateY(0);opacity:1;} 
-}
-
-.card.accelerator-card {
-  background:radial-gradient(circle, #ff1744, #b71c1c);
-  border:3px solid #ffd700;
-  box-shadow:0 0 20px rgba(255,23,68,0.8);
-  animation:accelCardPulse 1s infinite;
-}
+@keyframes newCard { 0%{transform:translateY(-50px);opacity:0;} 100%{transform:translateY(0);opacity:1;} }
+.card.accelerator-card { background:radial-gradient(circle, #ff1744, #b71c1c); border:3px solid #ffd700; box-shadow:0 0 20px rgba(255,23,68,0.8); animation:accelCardPulse 1s infinite; }
 @keyframes accelCardPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
-
-.card-rank {
-  position:absolute; top:3px; left:5px;
-  font-family:'Arial Black', sans-serif; font-weight:900;
-  font-size:14px; color:#222; z-index:2;
-}
+.card-rank { position:absolute; top:3px; left:5px; font-family:'Arial Black', sans-serif; font-weight:900; font-size:14px; color:#222; z-index:2; }
 .card-sym { width:85%; height:85%; display:flex; align-items:center; justify-content:center; z-index:1; }
-
-.win-display {
-  text-align:center; padding:10px 0 5px; flex-shrink:0;
-  font-family:'Arial Black', sans-serif; font-size:22px; font-weight:900;
-  color:#ffd700; text-shadow:2px 2px 0 #000, 0 0 10px rgba(255,215,0,0.5);
-  letter-spacing:1px;
-}
+.win-display { text-align:center; padding:10px 0 5px; flex-shrink:0; font-family:'Arial Black', sans-serif; font-size:22px; font-weight:900; color:#ffd700; text-shadow:2px 2px 0 #000, 0 0 10px rgba(255,215,0,0.5); letter-spacing:1px; }
 .win-display .amount { color:#fff; margin-left:10px; }
-
-.controls {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)),              radial-gradient(ellipse at center, #1a3d2a 0%, #0d2818 100%);
-  padding:10px 15px 15px; border-top:3px solid #5d4037; flex-shrink:0; z-index:20;
-}
-.controls-row {
-  display:flex; justify-content:space-around; align-items:center; margin-bottom:8px;
-}
-.ctrl-btn {
-  width:50px; height:50px; border-radius:50%; border:none;
-  background:radial-gradient(circle at 30% 30%, #8d6e63, #4e342e);
-  color:#fff; font-size:22px; cursor:pointer;
-  box-shadow:0 4px 0 #2e1c15, 0 5px 10px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.2);
-  display:flex; align-items:center; justify-content:center;
-  transition:transform 0.1s;
-}
+.controls { background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), radial-gradient(ellipse at center, #1a3d2a 0%, #0d2818 100%); padding:10px 15px 15px; border-top:3px solid #5d4037; flex-shrink:0; z-index:20; }
+.controls-row { display:flex; justify-content:space-around; align-items:center; margin-bottom:8px; }
+.ctrl-btn { width:50px; height:50px; border-radius:50%; border:none; background:radial-gradient(circle at 30% 30%, #8d6e63, #4e342e); color:#fff; font-size:22px; cursor:pointer; box-shadow:0 4px 0 #2e1c15, 0 5px 10px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; transition:transform 0.1s; }
 .ctrl-btn:active { transform:translateY(3px); box-shadow:0 1px 0 #2e1c15; }
 .ctrl-btn svg { width:28px; height:28px; }
-
-.spin-btn {
-  width:85px; height:85px;
-  background:radial-gradient(circle at 30% 30%, #fff59d, #f9a825, #e65100);
-  border:4px solid #fff;
-  box-shadow:0 0 20px #ffd700, 0 6px 0 #bf360c, 0 8px 15px rgba(0,0,0,0.5);
-  font-family:'Impact', sans-serif; font-size:20px; font-weight:900;
-  color:#5d4037; text-shadow:1px 1px 0 rgba(255,255,255,0.5);
-  animation:spinBtnGlow 2s infinite alternate;
-}
+.spin-btn { width:85px; height:85px; background:radial-gradient(circle at 30% 30%, #fff59d, #f9a825, #e65100); border:4px solid #fff; box-shadow:0 0 20px #ffd700, 0 6px 0 #bf360c, 0 8px 15px rgba(0,0,0,0.5); font-family:'Impact', sans-serif; font-size:20px; font-weight:900; color:#5d4037; text-shadow:1px 1px 0 rgba(255,255,255,0.5); animation:spinBtnGlow 2s infinite alternate; }
 @keyframes spinBtnGlow { from{box-shadow:0 0 15px #ffd700,0 6px 0 #bf360c;} to{box-shadow:0 0 30px #ffeb3b,0 6px 0 #bf360c;} }
 .spin-btn:active { transform:translateY(4px); box-shadow:0 0 15px #ffd700, 0 2px 0 #bf360c; }
 .spin-btn.spinning { animation:spinRotate 0.5s linear infinite; }
 @keyframes spinRotate { from{transform:rotate(0);} to{transform:rotate(360deg);} }
-
-.bet-row {
-  display:flex; justify-content:space-between; align-items:center;
-  font-size:13px; color:#fff; font-weight:bold; text-shadow:1px 1px 2px #000;
-}
+.bet-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#fff; font-weight:bold; text-shadow:1px 1px 2px #000; }
 .bet-label { color:#ffd700; cursor:pointer; text-decoration:underline; }
 .autoplay-hint { color:#aaa; font-size:11px; font-style:italic; }
-
-.balance-row {
-  text-align:center; margin-top:5px;
-  font-size:16px; font-weight:bold; color:#ffd700; text-shadow:1px 1px 2px #000;
-}
-
+.balance-row { text-align:center; margin-top:5px; font-size:16px; font-weight:bold; color:#ffd700; text-shadow:1px 1px 2px #000; }
 .version { position:absolute; bottom:3px; left:8px; font-size:10px; color:#666; z-index:5; }
-
-.firebase-status {
-  position:absolute; top:3px; right:8px; font-size:10px; z-index:5;
-  display:flex; align-items:center; gap:4px;
-}
-.firebase-status .dot {
-  width:8px; height:8px; border-radius:50%;
-  background:#f44336; animation:blink 1s infinite;
-}
+.firebase-status { position:absolute; top:3px; right:8px; font-size:10px; z-index:5; display:flex; align-items:center; gap:4px; }
+.firebase-status .dot { width:8px; height:8px; border-radius:50%; background:#f44336; animation:blink 1s infinite; }
 .firebase-status.connected .dot { background:#4caf50; animation:none; }
 .firebase-status span { color:#888; }
 @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
-.bet-modal-overlay {
-  position:absolute; bottom:0; left:0; right:0; top:0;
-  background:rgba(0,0,0,0.85); z-index:100;
-  display:none; align-items:flex-end; justify-content:center;
-}
+.bet-modal-overlay { position:absolute; bottom:0; left:0; right:0; top:0; background:rgba(0,0,0,0.85); z-index:100; display:none; align-items:flex-end; justify-content:center; }
 .bet-modal-overlay.show { display:flex; }
-.bet-modal {
-  background:linear-gradient(to bottom, #5d4037, #2e1c15);
-  border:3px solid #ffd700; border-radius:15px 15px 0 0;
-  padding:20px; width:100%; max-width:450px;
-  color:#fff; box-shadow:0 0 30px rgba(255,215,0,0.5);
-  animation:slideUp 0.3s ease-out;
-}
+.bet-modal { background:linear-gradient(to bottom, #5d4037, #2e1c15); border:3px solid #ffd700; border-radius:15px 15px 0 0; padding:20px; width:100%; max-width:450px; color:#fff; box-shadow:0 0 30px rgba(255,215,0,0.5); animation:slideUp 0.3s ease-out; }
 @keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
 .bet-modal h3 { color:#ffd700; margin-bottom:15px; text-align:center; font-size:18px; text-transform:uppercase; }
 .bet-options { display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:15px; }
-.bet-opt {
-  background:linear-gradient(to bottom, #ffd700, #b8860b);
-  color:#000; border:none; padding:12px; border-radius:10px;
-  font-weight:bold; font-size:14px; cursor:pointer;
-  box-shadow:0 3px 0 #5d4037; transition:all 0.2s;
-}
+.bet-opt { background:linear-gradient(to bottom, #ffd700, #b8860b); color:#000; border:none; padding:12px; border-radius:10px; font-weight:bold; font-size:14px; cursor:pointer; box-shadow:0 3px 0 #5d4037; transition:all 0.2s; }
 .bet-opt:active { transform:translateY(2px); box-shadow:0 1px 0 #5d4037; }
 .bet-opt.selected { background:linear-gradient(to bottom, #76ff03, #2e7d32); color:#fff; box-shadow:0 0 10px #76ff03; }
-.close-bet {
-  width:100%; background:#4e342e; color:#fff; border:none;
-  padding:12px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:14px;
-}
-
-.modal-overlay {
-  position:absolute; top:0; left:0; right:0; bottom:0;
-  background:rgba(0,0,0,0.8); z-index:100;
-  display:none; align-items:center; justify-content:center;
-}
+.close-bet { width:100%; background:#4e342e; color:#fff; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:14px; }
+.modal-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:100; display:none; align-items:center; justify-content:center; }
 .modal-overlay.show { display:flex; }
-.modal {
-  background:linear-gradient(to bottom, #5d4037, #2e1c15);
-  border:3px solid #ffd700; border-radius:15px;
-  padding:20px; width:85%; max-width:320px; text-align:center;
-  color:#fff; box-shadow:0 0 30px rgba(255,215,0,0.5);
-}
+.modal { background:linear-gradient(to bottom, #5d4037, #2e1c15); border:3px solid #ffd700; border-radius:15px; padding:20px; width:85%; max-width:320px; text-align:center; color:#fff; box-shadow:0 0 30px rgba(255,215,0,0.5); }
 .modal h3 { color:#ffd700; margin-bottom:15px; font-size:20px; }
 .modal-row { display:flex; justify-content:space-between; margin:10px 0; font-size:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; }
-.modal-btn {
-  background:linear-gradient(to bottom, #ffd700, #b8860b);
-  color:#000; border:none; padding:10px 25px; border-radius:20px;
-  font-weight:bold; font-size:14px; margin-top:15px; cursor:pointer;
-  box-shadow:0 3px 0 #5d4037;
-}
+.modal-btn { background:linear-gradient(to bottom, #ffd700, #b8860b); color:#000; border:none; padding:10px 25px; border-radius:20px; font-weight:bold; font-size:14px; margin-top:15px; cursor:pointer; box-shadow:0 3px 0 #5d4037; }
 .modal-btn:active { transform:translateY(2px); box-shadow:0 1px 0 #5d4037; }
-
-.win-popup {
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  background:radial-gradient(circle, #ffd700, #f57f17);
-  border:4px solid #fff; border-radius:20px; padding:20px 40px;
-  text-align:center; z-index:50; display:none;
-  box-shadow:0 0 50px rgba(255,215,0,0.8);
-  animation:winPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+.win-popup { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:radial-gradient(circle, #ffd700, #f57f17); border:4px solid #fff; border-radius:20px; padding:20px 40px; text-align:center; z-index:50; display:none; box-shadow:0 0 50px rgba(255,215,0,0.8); animation:winPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes winPop { 0%{transform:translate(-50%,-50%) scale(0);} 70%{transform:translate(-50%,-50%) scale(1.2);} 100%{transform:translate(-50%,-50%) scale(1);} }
 .win-popup.show { display:block; }
 .win-popup .big { font-family:'Impact', sans-serif; font-size:40px; color:#fff; text-shadow:2px 2px 0 #000; margin-bottom:5px; }
 .win-popup .amt { font-size:24px; font-weight:bold; color:#fff; text-shadow:1px 1px 0 #000; }
-
-.free-spins-banner {
-  position:absolute; top:100px; left:50%; transform:translateX(-50%);
-  background:linear-gradient(to right, #ff1744, #d50000);
-  border:3px solid #ffd700; border-radius:15px;
-  padding:10px 20px; color:#fff; font-weight:bold;
-  box-shadow:0 0 30px rgba(255,23,68,0.8);
-  display:none; z-index:25; text-align:center;
-  animation:bannerPulse 1s infinite alternate;
-  min-width:200px;
-}
+.free-spins-banner { position:absolute; top:100px; left:50%; transform:translateX(-50%); background:linear-gradient(to right, #ff1744, #d50000); border:3px solid #ffd700; border-radius:15px; padding:10px 20px; color:#fff; font-weight:bold; box-shadow:0 0 30px rgba(255,23,68,0.8); display:none; z-index:25; text-align:center; animation:bannerPulse 1s infinite alternate; min-width:200px; }
 @keyframes bannerPulse { from{transform:translateX(-50%) scale(1);} to{transform:translateX(-50%) scale(1.05);} }
 .free-spins-banner.show { display:block; }
 .free-spins-banner .label { font-size:14px; letter-spacing:2px; }
 .free-spins-banner .count { font-size:36px; font-family:'Impact', sans-serif; color:#ffd700; text-shadow:2px 2px 0 #000; }
 .free-spins-banner .sub { font-size:11px; color:#fff; opacity:0.9; }
-
-.accel-activation {
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  background:radial-gradient(circle, #ff1744, #b71c1c);
-  border:5px solid #ffd700; border-radius:20px;
-  padding:30px 50px; text-align:center; z-index:60; display:none;
-  box-shadow:0 0 60px rgba(255,23,68,0.9);
-  animation:activPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+.accel-activation { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:radial-gradient(circle, #ff1744, #b71c1c); border:5px solid #ffd700; border-radius:20px; padding:30px 50px; text-align:center; z-index:60; display:none; box-shadow:0 0 60px rgba(255,23,68,0.9); animation:activPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes activPop { 0%{transform:translate(-50%,-50%) scale(0);} 70%{transform:translate(-50%,-50%) scale(1.3);} 100%{transform:translate(-50%,-50%) scale(1);} }
 .accel-activation.show { display:block; }
 .accel-activation .title { font-family:'Impact', sans-serif; font-size:36px; color:#ffd700; text-shadow:2px 2px 0 #000; margin-bottom:10px; }
 .accel-activation .desc { font-size:20px; color:#fff; text-shadow:1px 1px 0 #000; }
-.free-spins-end {
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  background:radial-gradient(circle, #1565c0, #0d47a1);
-  border:5px solid #ffd700; border-radius:20px;
-  padding:30px 50px; text-align:center; z-index:60; display:none;
-  box-shadow:0 0 60px rgba(21,101,192,0.9);
-  animation:activPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+.free-spins-end { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:radial-gradient(circle, #1565c0, #0d47a1); border:5px solid #ffd700; border-radius:20px; padding:30px 50px; text-align:center; z-index:60; display:none; box-shadow:0 0 60px rgba(21,101,192,0.9); animation:activPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .free-spins-end.show { display:block; }
 .free-spins-end .title { font-family:'Impact', sans-serif; font-size:32px; color:#ffd700; text-shadow:2px 2px 0 #000; margin-bottom:10px; }
 .free-spins-end .desc { font-size:16px; color:#fff; text-shadow:1px 1px 0 #000; margin-bottom:5px; }
 .free-spins-end .total { font-size:24px; color:#76ff03; font-weight:bold; }
-
-.connection-error {
-  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  background:#b71c1c; color:white; padding:20px 30px; border-radius:15px;
-  z-index:9999; display:none; text-align:center; font-weight:bold;
-  box-shadow:0 0 30px rgba(0,0,0,0.8); border:2px solid #ffd700;
-}
+.connection-error { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#b71c1c; color:white; padding:20px 30px; border-radius:15px; z-index:9999; display:none; text-align:center; font-weight:bold; box-shadow:0 0 30px rgba(0,0,0,0.8); border:2px solid #ffd700; }
 .connection-error.show { display:block; }
 </style>
 </head>
 <body>
 
-<div class="connection-error" id="connectionError">
-  ⚠️ Connection Error!<br>Please check your internet.
-</div>
+<div class="connection-error" id="connectionError">⚠️ Connection Error!<br>Please check your internet.</div>
 
 <div class="phone">
- 
-
   <div class="header">
     <div style="color:#fff;font-size:20px;cursor:pointer;" onclick="window.location.href=document.referrer || 'about:blank'">‹</div>
     <div class="balance-pill">
@@ -486,7 +233,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
 
 <script>
 // ============================================
-// FIREBASE CONFIG - MAIN SITE CONNECTION
+// FIREBASE CONFIG
 // ============================================
 const firebaseConfig = {
   apiKey: "AIzaSyAy9PPm5UJpuhxfuPhNgqsUOOBFXXlmzU8",
@@ -503,11 +250,7 @@ if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const database = firebase.database();
 database.goOnline();
 
-// ============================================
-// USER CONNECTION - GET FROM URL OR LOCALSTORAGE
-// ============================================
 let USER_PHONE = "Guest";
-let userRef = null;
 let balanceRef = null;
 let turnoverRef = null;
 let balanceListener = null;
@@ -515,23 +258,14 @@ let balanceListener = null;
 function getUserPhone() {
   const urlParams = new URLSearchParams(window.location.search);
   let phone = urlParams.get('user');
-  
-  if (!phone) {
-    phone = localStorage.getItem('userPhone');
-  }
-  
-  // Ensure 0 prefix for Bangladesh numbers
-  if (phone && !phone.startsWith('0')) {
-    phone = '0' + phone;
-  }
-  
+  if (!phone) { phone = localStorage.getItem('userPhone'); }
+  if (phone && !phone.startsWith('0')) { phone = '0' + phone; }
   return phone || "Guest";
 }
-
 USER_PHONE = getUserPhone();
 
 // ============================================
-// GAME STATE
+// GAME STATE & ADMIN CONTROL
 // ============================================
 const SYMBOLS = {
   ace: `<svg viewBox="0 0 100 130" width="100%" height="100%"><path d="M50 10 L85 50 Q90 60 80 65 L65 60 L55 115 L45 115 L35 60 L20 65 Q10 60 15 50 Z" fill="#000" stroke="#ffd700" stroke-width="2"/><text x="50" y="75" text-anchor="middle" fill="#ffd700" font-family="Impact" font-size="22" font-weight="bold">ACE</text></svg>`,
@@ -561,6 +295,9 @@ const ACCEL_REQUIRED = 3;
 let spinCounter = 0;
 const SPINS_PER_ACCEL = 50;
 
+// --- ADMIN CONTROL VARIABLE ---
+let IS_WIN_ALLOWED = true; // Default true
+
 const grid = document.getElementById('grid');
 const statusEl = document.getElementById('firebaseStatus');
 const statusText = document.getElementById('firebaseStatusText');
@@ -570,16 +307,11 @@ const errorEl = document.getElementById('connectionError');
 // FIREBASE INITIALIZATION
 // ============================================
 function initFirebase() {
-  if (USER_PHONE === "Guest") {
-    showConnectionError("No user logged in!");
-    return;
-  }
+  if (USER_PHONE === "Guest") { showConnectionError("No user logged in!"); return; }
   
-  userRef = database.ref('users/' + USER_PHONE);
   balanceRef = database.ref('users/' + USER_PHONE + '/balance');
   turnoverRef = database.ref('users/' + USER_PHONE + '/turnover');
   
-  // Connection status listener
   database.ref('.info/connected').on('value', (snap) => {
     if (snap.val() === true) {
       statusEl.classList.add('connected');
@@ -591,16 +323,20 @@ function initFirebase() {
     }
   });
   
-  // REAL-TIME BALANCE LISTENER - Updates whenever main site changes balance
   if (balanceListener) balanceRef.off('value', balanceListener);
   balanceListener = balanceRef.on('value', (snapshot) => {
     if (snapshot.exists()) {
       balance = parseFloat(snapshot.val()) || 0;
       updateUI();
     }
-  }, (error) => {
-    console.error('Balance listener error:', error);
-    showConnectionError("Cannot load balance!");
+  }, (error) => { console.error('Balance listener error:', error); });
+
+  // --- ADMIN CONTROL LISTENER ---
+  database.ref('admin_settings/win_control').on('value', (snapshot) => {
+    const val = snapshot.val();
+    // If value is explicitly false, disable big wins. Otherwise enable.
+    IS_WIN_ALLOWED = (val !== false);
+    console.log("Admin Win Control:", IS_WIN_ALLOWED ? "ON" : "OFF");
   });
 }
 
@@ -610,33 +346,22 @@ function showConnectionError(msg) {
   setTimeout(() => errorEl.classList.remove('show'), 3000);
 }
 
-// ============================================
-// DEDUCT BET WITH TURNOVER REDUCTION
-// ============================================
 async function deductBet(betAmount) {
   if (USER_PHONE === "Guest") return false;
-  
   try {
-    // First check current balance
     const balSnap = await balanceRef.once('value');
     const currentBal = parseFloat(balSnap.val()) || 0;
+    if (currentBal < betAmount) return false;
     
-    if (currentBal < betAmount) {
-      return false;
-    }
-    
-    // Update balance (deduct)
     await balanceRef.transaction(current => {
       const newBal = (parseFloat(current) || 0) - betAmount;
       return newBal < 0 ? undefined : newBal;
     });
     
-    // Reduce turnover (important for withdrawal)
     await turnoverRef.transaction(current => {
       let newT = (parseFloat(current) || 0) - betAmount;
       return newT < 0 ? 0 : newT;
     });
-    
     return true;
   } catch (error) {
     console.error('Bet deduction error:', error);
@@ -645,24 +370,13 @@ async function deductBet(betAmount) {
   }
 }
 
-// ============================================
-// ADD WINNINGS TO BALANCE
-// ============================================
 async function addWinnings(winAmount) {
   if (USER_PHONE === "Guest" || winAmount <= 0) return;
-  
   try {
     await balanceRef.transaction(current => {
       return (parseFloat(current) || 0) + winAmount;
     });
-    
-    // Add to totalDeposit for tracking (optional)
-    await database.ref('users/' + USER_PHONE + '/totalDeposit').transaction(current => {
-      return (parseFloat(current) || 0) + winAmount;
-    });
-  } catch (error) {
-    console.error('Add winnings error:', error);
-  }
+  } catch (error) { console.error('Add winnings error:', error); }
 }
 
 // ============================================
@@ -691,6 +405,7 @@ function renderCard(el, sym) {
   el.appendChild(s);
 }
 
+// --- MODIFIED RANDOM FUNCTION FOR ADMIN CONTROL ---
 function randomSym(isFinalResult = false) { 
   if (acceleratorMode) {
     const rand = Math.random();
@@ -702,9 +417,17 @@ function randomSym(isFinalResult = false) {
     return {type:'accelerator', rank:''};
   }
 
+  // --- ADMIN CHECK START ---
+  if (isFinalResult && !IS_WIN_ALLOWED) {
+    // Admin OFF mode: Force low value cards (Jack, Queen, King, Spade)
+    // Exclude Ace to prevent big wins
+    const loseCards = [CARD_TYPES[1], CARD_TYPES[2], CARD_TYPES[3], CARD_TYPES[4]];
+    return loseCards[Math.floor(Math.random() * loseCards.length)];
+  }
+  // --- ADMIN CHECK END ---
+
   if (isFinalResult) {
     const shouldPlayerLose = Math.random() < 0.75; 
-    
     if (shouldPlayerLose) {
       const lowValCards = CARD_TYPES.slice(2);
       if (Math.random() < 0.8) {
@@ -801,7 +524,6 @@ async function spin() {
       return;
     }
     
-    // DEDUCT BET FROM FIREBASE
     const success = await deductBet(bet);
     if (!success) {
       showModal('noBalance');
@@ -893,7 +615,6 @@ async function finishSpin() {
 
   await cascadeMatches();
   
-  // ADD WINNINGS TO FIREBASE IF ANY
   if (win > 0) {
     await addWinnings(win);
   }
@@ -908,6 +629,7 @@ async function finishSpin() {
   }
 }
 
+// --- MODIFIED CASCADE MATCHES FOR SMALL WINS ---
 async function cascadeMatches() {
   let hasMatches = true;
   let cascadeCount = 0;
@@ -957,15 +679,29 @@ async function cascadeMatches() {
         winFactor = 0.1;
     }
 
-    const winAmt = acceleratorMode 
-        ? ACCEL_WIN_AMOUNTS[Math.floor(Math.random() * ACCEL_WIN_AMOUNTS.length)] 
-        : bet * mult * winFactor;
+    // --- ADMIN CONTROL FOR WIN AMOUNT ---
+    let finalWinAmt = 0;
+    
+    if (!IS_WIN_ALLOWED && !acceleratorMode) {
+        // Admin OFF Mode: Give small random wins (10 to 12 Taka) occasionally
+        // Only if there was a match (winFactor > 0)
+        if (winFactor > 0 && Math.random() < 0.3) { // 30% chance to give small win on match
+            finalWinAmt = 10 + Math.random() * 2; // Between 10 and 12
+        } else {
+            finalWinAmt = 0; // No win
+        }
+    } else {
+        // Normal Mode or Accelerator Mode
+        finalWinAmt = acceleratorMode 
+            ? ACCEL_WIN_AMOUNTS[Math.floor(Math.random() * ACCEL_WIN_AMOUNTS.length)] 
+            : bet * mult * winFactor;
+    }
+    // --- END ADMIN CONTROL ---
         
-    win += winAmt;
-    // Note: Balance will be updated via real-time listener after addWinnings()
+    win += finalWinAmt;
     
     if (acceleratorMode) {
-      freeSpinsTotalWin += winAmt;
+      freeSpinsTotalWin += finalWinAmt;
     }
     
     updateMultiplier(mult);
@@ -1011,7 +747,6 @@ async function endFreeSpins() {
   
   document.getElementById('freeSpinsBanner').classList.remove('show');
   
-  // Add all free spin winnings at once
   if (freeSpinsTotalWin > 0) {
     await addWinnings(freeSpinsTotalWin);
   }
@@ -1078,7 +813,6 @@ async function buyBonus() {
   const cost = bet * 50;
   if (balance < cost) { showModal('noBalanceBonus'); return; }
   if (confirm(`Buy Bonus for Tk ${cost.toFixed(2)}?`)) {
-    // Deduct from Firebase
     const success = await deductBet(cost);
     if (success) {
       triggerAccelerator();
@@ -1109,7 +843,6 @@ initGrid();
 initFirebase();
 updateUI();
 
-// Log user entry
 console.log('SuperAce loaded for user:', USER_PHONE);
 </script>
 </body>
