@@ -573,11 +573,6 @@ async function finishSpin() {
   if (acceleratorMode) {
     freeSpinsLeft--;
     updateFreeSpinsDisplay();
-    
-    if (freeSpinsLeft <= 0) {
-      await endFreeSpins();
-      return;
-    }
   }
 
   if (!acceleratorMode) {
@@ -615,16 +610,21 @@ async function finishSpin() {
 
   await cascadeMatches();
   
-  if (win > 0) {
+  // Normal-spin winnings are credited here. Free-spin winnings are
+  // credited once as a total in endFreeSpins().
+  if (win > 0 && !acceleratorMode) {
     await addWinnings(win);
   }
 
-  updateUI(); 
+  updateUI();
   isSpinning = false;
-  
-  if (acceleratorMode && freeSpinsLeft > 0) {
-    setTimeout(() => spin(), turbo ? 500 : 1500);  
-  } else if (autoPlay && !acceleratorMode) {
+
+  if (acceleratorMode && freeSpinsLeft <= 0) {
+    await endFreeSpins();
+    return;
+  } else if (acceleratorMode && freeSpinsLeft > 0) {
+    setTimeout(() => spin(), turbo ? 500 : 1500);
+  } else if (autoPlay) {
     autoTimer = setTimeout(spin, turbo ? 300 : 1000);
   }
 }
