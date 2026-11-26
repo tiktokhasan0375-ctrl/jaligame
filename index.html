@@ -362,6 +362,7 @@ async function deductBet(betAmount) {
       let newT = (parseFloat(current) || 0) - betAmount;
       return newT < 0 ? 0 : newT;
     });
+    try{window.parent.postMessage({type:"bet",game:"SuperAce",bet:Number(betAmount)||0,timestamp:Date.now()},"*");}catch(e){}
     return true;
   } catch (error) {
     console.error('Bet deduction error:', error);
@@ -376,6 +377,7 @@ async function addWinnings(winAmount) {
     await balanceRef.transaction(current => {
       return (parseFloat(current) || 0) + winAmount;
     });
+    try{window.parent.postMessage({type:"result",game:"SuperAce",win:Number(winAmount)||0,timestamp:Date.now()},"*");}catch(e){}
   } catch (error) { console.error('Add winnings error:', error); }
 }
 
